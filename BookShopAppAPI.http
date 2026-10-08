@@ -1,0 +1,63 @@
+@host = http://localhost:5143
+
+### Kitabları gətir
+GET {{host}}/api/books
+
+### Bir kitabı gətir
+GET {{host}}/api/books/1
+
+### Kateqoriyalar
+GET {{host}}/api/books/categories
+
+### Admin login (cookie avtomatik saxlanılır)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "usernameOrEmail": "admin",
+  "password": "admin123"
+}
+
+### Yeni kitab yarat (əvvəl admin login et)
+POST {{host}}/api/books
+Content-Type: application/json
+
+{
+  "title": "Yeni kitab",
+  "author": "Müəllif",
+  "price": 12.50,
+  "imageUrl": "https://example.com/book.jpg",
+  "about": "Kitab haqqında məlumat",
+  "stock": 10,
+  "categoryId": 2
+}
+
+### Qeydiyyat
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "phoneNumber": "0500000000",
+  "password": "123456",
+  "confirmPassword": "123456"
+}
+
+### Admin dashboard (əvvəl admin login et)
+GET {{host}}/api/admin/dashboard
+
+### Səbətə kitab əlavə et (login lazımdır)
+POST {{host}}/api/cart/items
+Content-Type: application/json
+
+{
+  "bookId": 1,
+  "quantity": 1
+}
+
+### Səbəti göstər
+GET {{host}}/api/cart
+
+### Sifariş yarat
+POST {{host}}/api/orders/checkout
