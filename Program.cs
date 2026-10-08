@@ -1,11 +1,13 @@
+using AutoMapper;
 using BookShopAppAPI.Data;
-using BookShopAppAPI.Models;
+using BookShopAppAPI.Mappings;
 using BookShopAppAPI.Repositories;
 using BookShopAppAPI.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BookShopAppAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddAutoMapper(config =>
+{
+    var licenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+    if (!string.IsNullOrWhiteSpace(licenseKey)) config.LicenseKey = licenseKey;
+}, typeof(ApiMappingProfile));
+builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddControllers();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -44,31 +58,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.Services.GetRequiredService<AutoMapper.IConfigurationProvider>().AssertConfigurationIsValid();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.EnsureCreatedAsync();
-
-    if (!await db.Users.AnyAsync(user => user.Username == "admin"))
-    {
-        var admin = new AppUser
-        {
-            Username = "admin",
-            Email = "admin@bookshop.local",
-            PhoneNumber = "0000000000",
-            Role = "Admin"
-        };
-        var password = builder.Configuration["AdminSeed:Password"] ?? "admin123";
-        admin.PasswordHash = new PasswordHasher<AppUser>().HashPassword(admin, password);
-        db.Users.Add(admin);
-        await db.SaveChangesAsync();
-    }
-}
-
+await app.InitializeDatabaseAsync();
 app.Run();

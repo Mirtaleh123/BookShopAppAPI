@@ -45,6 +45,13 @@ password: admin123
 
 Sorğuları Visual Studio-da `BookShopAppAPI.http` faylı ilə yoxlaya bilərsiniz.
 
+## Kod quruluşu
+
+- `Repositories/Base` və `Services/Base` qovluqlarında ümumi repository və service əsasları ayrıca fayllardadır.
+- `Contracts/Responses` qovluğunda hər API cavab modeli ayrıca fayldadır.
+- `Mappings/ApiMappingProfile.cs` entity və sorğu modellərini cavab modellərinə xəritələyir. Servislər `AutoMapper.IMapper` istifadə edir.
+- AutoMapper 16 üçün lisenziya açarı lazımdır. Açarı mənbə koduna yazmadan `AutoMapper__LicenseKey` mühit dəyişəni ilə verə bilərsiniz.
+
 ## MVC ilə müqayisə
 
 ```text

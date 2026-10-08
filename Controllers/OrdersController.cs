@@ -1,34 +1,16 @@
 using BookShopAppAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BookShopAppAPI.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("api/orders")]
-public class OrdersController(IOrderService orders) : ControllerBase
+public class OrdersController(IOrderService orders) : AuthenticatedControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetMine()
-    {
-        var result = await orders.GetUserOrdersAsync(CurrentUserId);
-        return Ok(result.Select(order => new
-        {
-            order.Id,
-            order.OrderDate,
-            status = order.Status.ToString(),
-            order.TotalPrice,
-            items = order.OrderItems.Select(item => new
-            {
-                item.BookId,
-                item.Book.Title,
-                item.Quantity,
-                item.Price
-            })
-        }));
-    }
+    public async Task<IActionResult> GetMine() => Ok(await orders.GetUserOrdersAsync(CurrentUserId));
 
     [HttpPost("checkout")]
     public async Task<IActionResult> Checkout()
@@ -48,5 +30,4 @@ public class OrdersController(IOrderService orders) : ControllerBase
             : BadRequest(new { message = result.Message });
     }
 
-    private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 }

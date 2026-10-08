@@ -4,23 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookShopAppAPI.Repositories;
 
-public interface IBookRepository
-{
-    Task<(List<Book> Items, int TotalCount)> GetPagedAsync(string? search, string? sort, int? categoryId, int page, int pageSize);
-    Task<List<Category>> GetCategoriesAsync();
-    Task<Book?> GetByIdAsync(int id);
-    Task<Book?> GetTrackedByIdAsync(int id);
-    Task AddAsync(Book book);
-    Task RateAsync(int bookId, int userId, int rating);
-    Task SaveAsync();
-}
-
-public class BookRepository(ApplicationDbContext db) : IBookRepository
+public class BookRepository(ApplicationDbContext db) : BaseRepository<Book>(db), IBookRepository
 {
     public async Task<(List<Book> Items, int TotalCount)> GetPagedAsync(
         string? search, string? sort, int? categoryId, int page, int pageSize)
     {
-        var query = db.Books.AsNoTracking()
+        var query = Entities.AsNoTracking()
             .Include(book => book.Category)
             .Where(book => !book.IsDeleted);
 
@@ -43,25 +32,23 @@ public class BookRepository(ApplicationDbContext db) : IBookRepository
     }
 
     public Task<List<Category>> GetCategoriesAsync() =>
-        db.Categories.AsNoTracking().OrderBy(category => category.Name).ToListAsync();
+        Db.Categories.AsNoTracking().OrderBy(category => category.Name).ToListAsync();
 
-    public Task<Book?> GetByIdAsync(int id) => db.Books.AsNoTracking()
+    public Task<Book?> GetByIdAsync(int id) => Entities.AsNoTracking()
         .Include(book => book.Category)
         .Include(book => book.BookRatings)
         .ThenInclude(rating => rating.User)
         .FirstOrDefaultAsync(book => book.Id == id && !book.IsDeleted);
 
     public Task<Book?> GetTrackedByIdAsync(int id) =>
-        db.Books.FirstOrDefaultAsync(book => book.Id == id && !book.IsDeleted);
-
-    public async Task AddAsync(Book book) => await db.Books.AddAsync(book);
+        Entities.FirstOrDefaultAsync(book => book.Id == id && !book.IsDeleted);
 
     public async Task RateAsync(int bookId, int userId, int rating)
     {
-        var existing = await db.BookRatings
+        var existing = await Db.BookRatings
             .FirstOrDefaultAsync(item => item.BookId == bookId && item.UserId == userId);
         if (existing is null)
-            await db.BookRatings.AddAsync(new BookRating { BookId = bookId, UserId = userId, Rating = rating });
+            await Db.BookRatings.AddAsync(new BookRating { BookId = bookId, UserId = userId, Rating = rating });
         else
         {
             existing.Rating = rating;
@@ -69,5 +56,4 @@ public class BookRepository(ApplicationDbContext db) : IBookRepository
         }
     }
 
-    public async Task SaveAsync() => await db.SaveChangesAsync();
 }
