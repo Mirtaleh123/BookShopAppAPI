@@ -1,10 +1,13 @@
+using BookShopAppAPI.Services.Abstract;
+using BookShopAppAPI.Services.Base;
+using BookShopAppAPI.Services;
 using AutoMapper;
 using BookShopAppAPI.Contracts;
 using BookShopAppAPI.Models;
-using BookShopAppAPI.Repositories;
+using BookShopAppAPI.Repositories.Abstract;
 using Microsoft.AspNetCore.Identity;
 
-namespace BookShopAppAPI.Services;
+namespace BookShopAppAPI.Services.Concrete;
 
 public sealed class AuthService(
     IUserRepository users,

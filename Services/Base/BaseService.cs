@@ -1,6 +1,7 @@
-using BookShopAppAPI.Repositories;
+using BookShopAppAPI.Services;
+using BookShopAppAPI.Repositories.Base;
 
-namespace BookShopAppAPI.Services;
+namespace BookShopAppAPI.Services.Base;
 
 public abstract class BaseService<TRepository>(TRepository repository) where TRepository : IRepository
 {

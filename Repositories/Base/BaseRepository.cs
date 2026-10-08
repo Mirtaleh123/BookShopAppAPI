@@ -1,7 +1,7 @@
 using BookShopAppAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookShopAppAPI.Repositories;
+namespace BookShopAppAPI.Repositories.Base;
 
 public abstract class BaseRepository<TEntity>(ApplicationDbContext db) : IBaseRepository<TEntity>
     where TEntity : class

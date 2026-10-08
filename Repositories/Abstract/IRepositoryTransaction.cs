@@ -1,4 +1,4 @@
-namespace BookShopAppAPI.Repositories;
+namespace BookShopAppAPI.Repositories.Abstract;
 
 public interface IRepositoryTransaction : IAsyncDisposable
 {

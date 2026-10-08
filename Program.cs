@@ -1,8 +1,10 @@
 using AutoMapper;
 using BookShopAppAPI.Data;
 using BookShopAppAPI.Mappings;
-using BookShopAppAPI.Repositories;
-using BookShopAppAPI.Services;
+using BookShopAppAPI.Repositories.Abstract;
+using BookShopAppAPI.Repositories.Concrete;
+using BookShopAppAPI.Services.Abstract;
+using BookShopAppAPI.Services.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;

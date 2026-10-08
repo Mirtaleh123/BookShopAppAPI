@@ -1,6 +1,7 @@
+using BookShopAppAPI.Services;
 using BookShopAppAPI.Contracts;
 
-namespace BookShopAppAPI.Services;
+namespace BookShopAppAPI.Services.Abstract;
 
 public interface IAuthService
 {

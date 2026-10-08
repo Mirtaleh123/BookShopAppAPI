@@ -1,9 +1,12 @@
+using BookShopAppAPI.Services.Abstract;
+using BookShopAppAPI.Services.Base;
+using BookShopAppAPI.Services;
 using AutoMapper;
 using BookShopAppAPI.Contracts;
 using BookShopAppAPI.Models;
-using BookShopAppAPI.Repositories;
+using BookShopAppAPI.Repositories.Abstract;
 
-namespace BookShopAppAPI.Services;
+namespace BookShopAppAPI.Services.Concrete;
 
 public sealed class CartService(ICartRepository cart, IMapper mapper)
     : BaseService<ICartRepository>(cart), ICartService

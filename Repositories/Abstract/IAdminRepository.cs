@@ -1,6 +1,8 @@
+using BookShopAppAPI.Repositories.Base;
+using BookShopAppAPI.Repositories;
 using BookShopAppAPI.Models;
 
-namespace BookShopAppAPI.Repositories;
+namespace BookShopAppAPI.Repositories.Abstract;
 
 public interface IAdminRepository : IRepository
 {

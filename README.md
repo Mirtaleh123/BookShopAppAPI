@@ -47,6 +47,9 @@ Sorğuları Visual Studio-da `BookShopAppAPI.http` faylı ilə yoxlaya bilərsin
 
 ## Kod quruluşu
 
+- `Repositories/Abstract` və `Services/Abstract` interfeysləri saxlayır.
+- `Repositories/Concrete` və `Services/Concrete` həmin interfeyslərin implementasiyalarını saxlayır.
+- Namespace-lər qovluqlara uyğundur; asılılıqlar `Program.cs` daxilində DI ilə birləşdirilir.
 - `Repositories/Base` və `Services/Base` qovluqlarında ümumi repository və service əsasları ayrıca fayllardadır.
 - `Contracts/Responses` qovluğunda hər API cavab modeli ayrıca fayldadır.
 - `Mappings/ApiMappingProfile.cs` entity və sorğu modellərini cavab modellərinə xəritələyir. Servislər `AutoMapper.IMapper` istifadə edir.

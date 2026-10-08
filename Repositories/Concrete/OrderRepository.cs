@@ -1,8 +1,10 @@
+using BookShopAppAPI.Repositories.Abstract;
+using BookShopAppAPI.Repositories.Base;
 using BookShopAppAPI.Data;
 using BookShopAppAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookShopAppAPI.Repositories;
+namespace BookShopAppAPI.Repositories.Concrete;
 
 public sealed class OrderRepository(ApplicationDbContext db) : BaseRepository<Order>(db), IOrderRepository
 {

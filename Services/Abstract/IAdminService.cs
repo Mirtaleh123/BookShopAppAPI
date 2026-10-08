@@ -1,7 +1,8 @@
+using BookShopAppAPI.Services;
 using BookShopAppAPI.Contracts;
 using BookShopAppAPI.Models;
 
-namespace BookShopAppAPI.Services;
+namespace BookShopAppAPI.Services.Abstract;
 
 public interface IAdminService
 {
